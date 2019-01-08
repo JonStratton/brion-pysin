@@ -1,6 +1,7 @@
 #!/usr/bin/python
 __author__ = 'Jon Stratton'
 import re, random
+from collections import defaultdict
 
 # Normal Character/Word/Sentence/Line cut up
 def traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness ):
@@ -15,7 +16,36 @@ def traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness ):
    chunked_text = chunk_text( in_string, split_frag, min_chunk, max_chunk )
    shuffled_chunks = shuffle_chunks( chunked_text, randomness )
    shuffled_text = join_chunks( shuffled_chunks, join_frag )
+
    return shuffled_text
+
+# Madlib cut up. This needs the nltk, which may not be installed. Load it the last moment.
+def madlib_cutup( in_string, randomness ):
+   from nltk.tokenize import sent_tokenize, word_tokenize
+   from nltk.tag import pos_tag
+
+   # Get a dict of words based on type, and an array of sentences with just the types instead of words (skeleton)
+   type_to_words  = defaultdict(list)
+   sent_skeletons = []
+   for sent in sent_tokenize( in_string ):
+      sent_skeleton = []
+      for word, tag in pos_tag( word_tokenize( sent ) ):
+         sent_skeleton.append( tag )
+         type_to_words[tag].append( word )
+      sent_skeletons.append( sent_skeleton )
+
+   # Shuffle items in dict, and sentence skeleton
+   shuffled_skeletons = shuffle_chunks( sent_skeletons, randomness )
+   for tag in type_to_words:
+      type_to_words[tag] = shuffle_chunks( type_to_words[tag], randomness )
+
+   # Foreach sentence, foreach word, pull a word out of the hashmaps. Then join together and 
+   out_text = []
+   for skel in shuffled_skeletons:
+      for tag in skel:
+         out_text.append( type_to_words[tag].pop( 0 ) )
+
+   return ' '.join( out_text )
 
 # Breaks input text into chunks
 def chunk_text( in_string, split_frag, min_chunk, max_chunk ):
