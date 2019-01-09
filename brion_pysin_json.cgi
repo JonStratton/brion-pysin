@@ -28,10 +28,12 @@ def main():
          max_chunk = int( params['max_chunk'] )
       if params['randomness']:
          randomness = int( params['randomness'] )
-      cutup_text = brion_pysin_lib.traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
-      result = {'success':'true','text':cutup_text};
+      cutup_text = brion_pysin_lib.cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
+      result = {'success':'true','text':cutup_text}
+   except ImportError:
+      result = {'success':'false','text':'Error, module missing dependancies.'}
    except:
-      result = {'success':'false'};
+      result = {'success':'false'}
    print 'Content-Type: application/json\n\n'
    print json.dumps(result)
    return 0

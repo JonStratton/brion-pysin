@@ -1,7 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 __author__ = 'Jon Stratton'
 import re, random
 from collections import defaultdict
+
+def cutup( in_string, frag_type, min_chunk, max_chunk, randomness ):
+   shuffled_text = ''
+   if frag_type == 'madlib':
+      shuffled_text = madlib_cutup( in_string, randomness )
+   else:
+      shuffled_text = traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
+
+   return shuffled_text
 
 # Normal Character/Word/Sentence/Line cut up
 def traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness ):

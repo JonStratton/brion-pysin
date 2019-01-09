@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 __author__ = 'Jon Stratton'
-import sys, getopt, brion_pysin_lib
+import sys, getopt, warnings, brion_pysin_lib
 
 ###############
 # Global Vars #
@@ -30,8 +30,13 @@ for o, a in myopts:
       frag_type  = a
 
 def main():
-   cutup_text = brion_pysin_lib.traditional_cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
-   print( '%s' % cutup_text )
+   try:
+      cutup_text = brion_pysin_lib.cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
+      print( '%s' % cutup_text )
+   except ImportError:
+      warnings.warn( 'Error, module missing dependancies.' )
+   except:
+      pass
    return 0
 
 main()
