@@ -31,7 +31,7 @@ def main():
       cutup_text = brion_pysin_lib.cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
       result = {'success':'true','text':cutup_text}
    except ImportError:
-      result = {'success':'false','text':'Error, module missing dependancies.'}
+      result = {'success':'false','text':'Error, module missing dependencies.'}
    except:
       result = {'success':'false'}
    print 'Content-Type: application/json\n\n'

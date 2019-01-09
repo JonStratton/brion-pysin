@@ -34,7 +34,7 @@ def main():
       cutup_text = brion_pysin_lib.cutup( in_string, frag_type, min_chunk, max_chunk, randomness )
       print( '%s' % cutup_text )
    except ImportError:
-      warnings.warn( 'Error, module missing dependancies.' )
+      warnings.warn( 'Error, module missing dependencies.' )
    except:
       pass
    return 0

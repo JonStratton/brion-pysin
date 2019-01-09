@@ -17,6 +17,7 @@
          <option value="word" selected="selected">Word</option>
          <option value="sent">Sentence</option>
          <option value="line">Line</option>
+         <option value="madlib">Madlib</option>
       </select>
    </td>
 </tr>
@@ -68,6 +69,17 @@
 
 $(document).ready(function(){
 
+   // Hide chunk sized when madlib selected
+   $('#frag_type').change(function() {
+      if ( $('#frag_type').val() == 'madlib' ) {
+         $('#min_chunk').prop('disabled',true);
+         $('#max_chunk').prop('disabled',true);
+      } else {
+         $('#min_chunk').prop('disabled',false);
+         $('#max_chunk').prop('disabled',false);
+      }
+   });
+
    $('#brion_pysin_form').submit(function(event){
       $('#brion_pysin_form_submit').prop('disabled',true);
       event.preventDefault();
@@ -87,8 +99,15 @@ $(document).ready(function(){
          contentType: 'application/json; charset=utf-8',
          dataType: 'json',
          success: function( result ) {
-            if ( result.text ) {
-               $('#in_string').val( result.text )
+            if ( result.success == 'true' ) {
+               if ( result.text ) {
+                  $('#in_string').val( result.text )
+               }
+            } else {
+               alert( result.text );
+               var error_type = $('#frag_type').val();
+               $('#frag_type').children('option[value="' + error_type + '"]').attr('disabled',true);
+               $('#frag_type').prop('selectedIndex',1);
             }
             $('#brion_pysin_form_submit').prop('disabled',false);
          }
